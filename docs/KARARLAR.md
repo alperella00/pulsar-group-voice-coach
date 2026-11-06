@@ -103,7 +103,8 @@ Her kararda değerlendirilen seçenekler, seçilen seçenek ve gerekçesi yazıl
   - LibriSpeech test-clean: temiz ses ile karşılaştırma.
 - **Neden:**
   - Common Voice artık sadece Mozilla Data Collective hesabıyla indirilebiliyor ve kayıtları kısa okuma cümleleri.
-  - TTS sesleri doğruluğu şişirir ve prosodileri yapay.
+  - TTS sesleri doğruluğu şişirir ve prosodileri yapay. **Smoke testlerde bile TTS kullanılmıyor** (2026-11-06
+    güncellemesi); her testte LibriSpeech veya AMI'den gerçek insan sesi var.
   - Gerçek kişi kaydı gerekmiyor, bu da biyometrik veri ve ücretsiz katman sorunlarını ortadan kaldırıyor.
 
 ### K14. Geliştirme replay ile, demo canlı Gemini ile (2026-11-06)
@@ -120,6 +121,16 @@ Her kararda değerlendirilen seçenekler, seçilen seçenek ve gerekçesi yazıl
   - RAG, çok oturumlu kullanımda öğrenci başına hafıza için anlam kazanıyor. Arama oturum başında yapılacak,
     her turda değil.
   - Ses imzası araması büyüse bile grup içinde kalmalı (yanlış eşleşme oranı ve gizlilik).
+
+### K17. Gemini 3.8 Live (v1beta) + COACH NOTE turun içinde (2026-11-06, ölçümle)
+- **Test:** `reports/gemini_turn_test.md` (gerçek insan sesi, model başına tür başına 3 deneme).
+- **Seçilen:** `gemini-3.8-live`, `v1beta`. COACH NOTE aktivite penceresinin içinde gönderiliyor:
+  `send_realtime_input(text=…)`, ardından `activity_end`.
+- **Neden:**
+  - 3.8: 9/9 cevap geldi, isimle hitap 9/9, sesli turda TTFB ~1,6 sn.
+  - 2.5 native audio: TTFB 5–7 sn. B yolunda notu 0/3 yok saydı.
+  - A yolu iki modelde de çalıştı; B yolu modele göre değişti.
+- **Not:** 2.5 sadece `v1alpha`'da bağlanıyor. Yedek olarak kalıyor ama zayıf.
 
 ### K15. İsim ve repo (2026-11-06)
 - Asistanın adı **Pulsar**.
