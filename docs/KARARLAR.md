@@ -70,6 +70,7 @@ Her kararda değerlendirilen seçenekler, seçilen seçenek ve gerekçesi yazıl
 ### K9. Konuşmacı embedding modeli: WeSpeaker ResNet34-LM, `wespeaker` + ONNX (2026-11-06)
 - **Seçenekler:** ECAPA-TDNN (SpeechBrain) / WeSpeaker ResNet34 / ResNet293 / CAM++ / pyannote sürümü / eski pyannote embedding.
 - **Seçilen:** WeSpeaker ResNet34-LM. Yedek CAM++.
+- **Güncelleme (2026-11-06):** Model `sherpa-onnx` ile çalıştırılıyor (aynı ONNX model; fbank çıkarımı kütüphanenin içinde, torch gerekmiyor). 2 sn ses için ~60 ms. Ölçüm: `reports/speaker_id_librispeech.md`.
 - **Neden:**
   - VoxCeleb1-O'da EER %0,72; ECAPA'da bu değer %0,87.
   - CPU'da pencere başına onlarca ms.
