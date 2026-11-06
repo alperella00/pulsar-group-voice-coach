@@ -1,9 +1,9 @@
 # Durum: nerede kaldık, sırada ne var
 
 > Bu dosya her çalışma oturumunun sonunda güncellenir. Yeni bir sohbet önce bunu okur, sonra gerekiyorsa
-> `MIMARI.md` (sistem), `KARARLAR.md` (K1–K17) ve `reports/README.md`'ye (bulgular) bakar.
+> `MIMARI.md` (sistem), `KARARLAR.md` (K1–K18) ve `reports/README.md`'ye (bulgular) bakar.
 
-**Son güncelleme:** 2026-11-06 gece (AMI testi bitti)
+**Son güncelleme:** 2026-11-07 (AMI testi bitti; demo eşiği K18: τ=0,45, m=0,05)
 
 ## Kısaca proje
 Pulsar: 3-4 kişilik online İngilizce konuşma grubunda kimin konuştuğunu ses parmak iziyle, nasıl konuştuğunu
@@ -31,10 +31,8 @@ prosodiyle bulan ve sadece kendisine hitap edilen turları, bir COACH NOTE ile b
 - **Test sesi her zaman gerçek insan sesi** (LibriSpeech/AMI). TTS yok, smoke testte bile (K13).
 
 ## Sırada
-1. **Kullanıcıya sorulacak:** Demoda hangi eşik kullanılsın? Aday: AMI ayarı τ=0,45, m=0,05 (henüz karar değil;
-   kayıtsız kişi araştırması gelince kesinleşecek).
-2. İskelet: ses I/O, Silero VAD ile tur kesme, replay modu, JSONL olay günlüğü (MIMARI §9).
-3. Gemini'de düşük düşünme ayarıyla TTFB'yi tekrar ölçmek.
+1. İskelet: ses I/O, Silero VAD ile tur kesme, replay modu, JSONL olay günlüğü (MIMARI §9).
+2. Gemini'de düşük düşünme ayarıyla TTFB'yi tekrar ölçmek.
 
 ## Açık konular
 - **Kayıtsız kişiyi reddetme:** Kullanıcı deep research yaptıracak, istek metni hazır:

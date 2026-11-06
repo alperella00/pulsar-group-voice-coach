@@ -133,6 +133,14 @@ Her kararda değerlendirilen seçenekler, seçilen seçenek ve gerekçesi yazıl
   - A yolu iki modelde de çalıştı; B yolu modele göre değişti.
 - **Not:** 2.5 sadece `v1alpha`'da bağlanıyor. Yedek olarak kalıyor ama zayıf.
 
+### K18. Demo eşiği: τ=0,45, marj=0,05 (2026-11-07, ölçümle)
+- **Seçenekler:** Başlangıç (0,5/0,1) / LibriSpeech ızgarası (0,3/0,05) / AMI ızgarası (0,45/0,05).
+- **Seçilen:** AMI ızgarası.
+- **Neden:** AMI demo koşullarına en yakın veri: karışık akış ve aynı oturumda kayıt/test. Doğal turlarda (3 kayıtlı + 1
+  kayıtsız) sonuç: doğru %88,8, unknown %9,4, yanlış isim %1,9 (< %2 hedefi), kayıtsız kabul %10,1.
+  LibriSpeech ayarı AMI'de yanlış isim %2,4 ve kayıtsız kabul %32 verdi, yani eşik veri setleri arasında taşınmıyor.
+- **Geçici:** Kayıtsız kişi araştırması (`docs/ARASTIRMA_ISTEGI_kayitsiz_kisi.md`) gelince gözden geçirilecek.
+
 ### K15. İsim ve repo (2026-11-06)
 - Asistanın adı **Pulsar**.
 - Repo `pulsar-group-voice-coach`, public. "chat" yerine "coach" seçildi, çünkü amaç dil pratiği.
