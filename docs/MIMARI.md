@@ -376,7 +376,56 @@ AMI toplantıları 4 kişilik. Bir konuşmacı kayıt dışı bırakılarak "kay
 
 ---
 
-## 11. Kalan açık noktalar (ölçümle veya denemeyle çözülecek)
+## 11. Sonraki adımlar: ölçeklenme ve uzun süreli hafıza (RAG)
+
+Demoda vektör DB ve RAG **yok** (K16):
+- 3-4 kişinin ses imzası bellekte tutuluyor. En yakın kişi `numpy` ile tek bir matris çarpımıyla bulunuyor.
+- Gemini'ye ihtiyacı olan bağlam (COACH NOTE + son konuşmaların özeti) doğrudan veriliyor.
+
+Ürün tek oturumluk bir demodan çok oturumlu bir uygulamaya dönüşünce iki yerde gerekli hale geliyorlar:
+
+### 11.1 Öğrenci başına uzun süreli hafıza (RAG)
+- **Sorun:** Pulsar şu an her oturuma sıfırdan başlıyor. Ayşe'nin geçen hafta "since/for" farkını karıştırdığını,
+  hangi konulardan hoşlandığını ya da akıcılığının haftalar içinde nasıl değiştiğini bilmiyor.
+- **Yazma tarafı (oturum sonunda, kişi başına):** Oturumun transkriptinden bir LLM kısa "hafıza kayıtları" çıkarıyor:
+  - tekrarlayan hatalar ("confuses since/for"),
+  - yeni öğrenilen kelimeler,
+  - konuşulan konular ve ilgi alanları,
+  - oturumun akıcılık özeti (hız, MLR, duraksama z-skorları).
+
+  Her kayıt küçük bir metin embedding modeliyle (ör. `multilingual-e5-small`) vektöre çevrilip `learner_id`,
+  tarih ve tür etiketleriyle bir vektör DB'ye yazılıyor (ör. LanceDB, gömülü çalışıyor, ayrı sunucu gerektirmiyor).
+- **Okuma tarafı:**
+  - Kişi tanındığında (oturum başında, kayıttan sonra) o kişinin kayıtları `learner_id` filtresiyle getiriliyor.
+  - Konuya göre en ilgili k kayıt seçilip kişinin profil önbelleğine konuyor.
+  - COACH NOTE'a tek satır ekleniyor. Örnek: `Memory: last session confused "since/for"; likes football.`
+- **Neden her turda arama yok?** "Pahalı iş seyrek, ucuz iş sık" ilkesi burada da geçerli. Arama oturum başında ve
+  konu değiştiğinde yapılıyor, her turda yapılmıyor. Böylece cevap gecikmesine bir şey eklenmiyor.
+- **Ölçüm:**
+  - Sentetik öğrenci geçmişlerinde, ilgili hatanın getirilen ilk k kayıt içinde olup olmadığı (hit@k).
+  - Hatırlatmanın cevap kalitesini değiştirip değiştirmediği (insan veya LLM değerlendirmesiyle A/B).
+- **Gizlilik:** Hafıza kayıtları kişisel veri. Ham transkript değil özet saklanıyor, kişi isterse tamamı siliniyor.
+
+### 11.2 Ses imzaları çoğalınca
+- Bir şirkette yüzlerce çalışan ya da bir konuşma kulübünde onlarca üye olunca, ses imzaları da bir vektör DB'de
+  `group_id` / `org_id` etiketiyle tutulabilir.
+- **Ama arama her zaman grup içinde yapılmalı, global "milyonlar içinde bu ses kimin?" araması yapılmamalı.** İki nedeni var:
+  - **Hata oranı aday sayısıyla büyüyor:** 3 kişi arasında doğru kişiyi bulmak kolay. Aday sayısı arttıkça birine
+    yanlışlıkla benzeyen birini bulma ihtimali de artıyor, yani yanlış eşleşme oranı yükseliyor.
+  - **Gizlilik:** Global ses araması, kişilerin habersizce tanınması anlamına gelir.
+- Pratikte bu arama yine küçük ve kapalı bir küme üzerinde yapılıyor: o görüşmeye katılan veya o gruba kayıtlı kişiler.
+
+### 11.3 Çok sayıda eşzamanlı oda
+- Tur işçisi (VAD, embedding, prosodi, ASR) bir servise dönüşüyor. Ses yerelde değil sunucuda işleniyor, ASR GPU'da
+  toplu (batch) çalışıyor.
+- Her oda S2S tarafında ayrı bir oturum açıyor. Buluta sadece hitap edilen turlar gittiği için maliyet konuşulan
+  toplam süreyle değil, Pulsar'la konuşulan süreyle ölçekleniyor.
+- Olay günlüğü (JSONL) merkezi bir analitik deposuna akıyor. Gecikme, `unknown` oranı ve sessiz kalma oranı gibi
+  metrikler gösterge panelinde izleniyor.
+
+---
+
+## 12. Kalan açık noktalar (ölçümle veya denemeyle çözülecek)
 
 1. COACH NOTE'u Gemini'ye hangi yolla göndermek daha güvenilir: `send_realtime_input(text)` mi,
    `send_client_content(turn_complete=False)` mi? (Cumartesi)

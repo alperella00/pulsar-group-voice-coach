@@ -110,6 +110,17 @@ Her kararda değerlendirilen seçenekler, seçilen seçenek ve gerekçesi yazıl
 - **Neden:** Replay bedava, tekrarlanabilir ve ölçülebilir. Gecikme ve proactive audio davranışı ise ancak canlı
   bağlantıyla ölçülebilir.
 
+### K16. Demoda vektör DB ve RAG yok; ölçeklenmede gelecek (2026-11-06)
+- **Seçenekler:** Ses imzalarını ve konuşma geçmişini şimdiden bir vektör DB'de tutmak / bellekte `numpy` ile çalışmak.
+- **Seçilen:** Demoda bellekte `numpy`. Uzun süreli hafıza (RAG) ve vektör DB, MIMARI §11'de sonraki adım olarak tasarlandı.
+- **Neden:**
+  - 3-4 vektör arasında en yakın komşuyu bulmak tek bir matris çarpımı (mikrosaniyeler). Vektör DB'ler milyonlarca
+    vektörde hızlı arama için var; burada sadece gereksiz bir katman olurdu.
+  - Gemini'ye bir doküman arşivinden bilgi getirmiyoruz; gereken bağlamı doğrudan veriyoruz.
+  - RAG, çok oturumlu kullanımda öğrenci başına hafıza için anlam kazanıyor. Arama oturum başında yapılacak,
+    her turda değil.
+  - Ses imzası araması büyüse bile grup içinde kalmalı (yanlış eşleşme oranı ve gizlilik).
+
 ### K15. İsim ve repo (2026-11-06)
 - Asistanın adı **Pulsar**.
 - Repo `pulsar-group-voice-coach`, public. "chat" yerine "coach" seçildi, çünkü amaç dil pratiği.

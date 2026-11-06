@@ -12,5 +12,8 @@ Pulsar joins a small group conversation (3–4 people, one mixed audio stream) a
 
 It also tracks each person's share of talking time and invites quiet participants into the conversation.
 
+**Next steps beyond the demo:** per-learner long-term memory (RAG over session summaries — recurring mistakes, vocabulary,
+fluency trends — retrieved once per session, not per turn), group-scoped voice-print storage, and multi-room serving.
+
 Design docs (Turkish for now): [`docs/MIMARI.md`](docs/MIMARI.md) (architecture),
 [`docs/KARARLAR.md`](docs/KARARLAR.md) (decisions), [`docs/ARASTIRMA.md`](docs/ARASTIRMA.md) (research notes & sources).
