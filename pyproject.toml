@@ -9,3 +9,8 @@ dependencies = [
     "sherpa-onnx>=2.0.1",
     "soundfile>=0.14.0",
 ]
+
+[dependency-groups]
+dev = [
+    "matplotlib>=3.11.2",
+]
