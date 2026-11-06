@@ -3,7 +3,7 @@
 > Bu dosya her çalışma oturumunun sonunda güncellenir. Yeni bir sohbet önce bunu okur, sonra gerekiyorsa
 > `MIMARI.md` (sistem), `KARARLAR.md` (K1–K17) ve `reports/README.md`'ye (bulgular) bakar.
 
-**Son güncelleme:** 2026-11-06 gece
+**Son güncelleme:** 2026-11-06 gece (AMI testi bitti)
 
 ## Kısaca proje
 Pulsar: 3-4 kişilik online İngilizce konuşma grubunda kimin konuştuğunu ses parmak iziyle, nasıl konuştuğunu
@@ -19,6 +19,7 @@ prosodiyle bulan ve sadece kendisine hitap edilen turları, bir COACH NOTE ile b
 | 11-06 | **Ses parmak izi, LibriSpeech** | 3 kişi / 2 sn: %95 (eşiksiz); ızgara ayarı τ=0,3, marj=0,05 → doğru %91, unknown %8, yanlış isim %1,4. Zayıf nokta: kayıtsız kişi %30+ kabul. `reports/speaker_id_librispeech.md` |
 | 11-06 | Okunur bulgular + grafikler | `reports/README.md`, `reports/figures/`, `scripts/make_figures.py` |
 | 11-06 | AMI verisi indirildi | `data/ami/audio/{ES2004a,IS1009a,TS3003a,EN2002a}.Mix-Headset.wav` + `data/ami/rttm/` (gitignored) |
+| 11-06 | **Ses parmak izi + konuşma payı, AMI** | 3 kayıtlı, doğal tur (medyan 2,6 sn): %96 eşiksiz. Eşik taşınmıyor: LibriSpeech ayarı (0,3/0,05) AMI'de yanlış isim %2,4, kayıtsız kabul %32; AMI ayarı **τ=0,45, m=0,05** → doğru %88,8, unknown %9,4, yanlış %1,9, kayıtsız %10. Konuşma payı hatası 2-6 puan. `reports/speaker_id_ami.md`, `reports/README.md` §3 |
 
 ## Ortam notları
 - `.env` içinde `GEMINI_API_KEY` (ücretsiz katman). Key'i yazdırma.
@@ -30,13 +31,9 @@ prosodiyle bulan ve sadece kendisine hitap edilen turları, bir COACH NOTE ile b
 - **Test sesi her zaman gerçek insan sesi** (LibriSpeech/AMI). TTS yok, smoke testte bile (K13).
 
 ## Sırada
-1. **AMI ile gerçekçi ses parmak izi testi** (kullanıcı seçti, 2026-11-06). Plan:
-   - RTTM'den her konuşmacının ilk ~25 sn'lik temiz (örtüşmesiz) konuşmasıyla kayıt.
-   - Toplantının geri kalanındaki turlar (örtüşmesiz, uzunluğa göre 1/2/4 sn+) ile test.
-   - Toplantılar 4 kişilik: 3 kişi kayıt + 1 kişi kayıtsız senaryosu da ölçülecek.
-   - LibriSpeech'te bulunan ızgara ayarı burada da denenecek; AMI'ye özel ızgara araması yapılacak.
-   - Ayrıca konuşma payı hatası (M3): pencereleri en yakın profile atayıp RTTM'deki gerçek paylarla karşılaştırmak.
-2. Sonra iskelet: ses I/O, Silero VAD ile tur kesme, replay modu, JSONL olay günlüğü (MIMARI §9).
+1. **Kullanıcıya sorulacak:** Demoda hangi eşik kullanılsın? Aday: AMI ayarı τ=0,45, m=0,05 (henüz karar değil;
+   kayıtsız kişi araştırması gelince kesinleşecek).
+2. İskelet: ses I/O, Silero VAD ile tur kesme, replay modu, JSONL olay günlüğü (MIMARI §9).
 3. Gemini'de düşük düşünme ayarıyla TTFB'yi tekrar ölçmek.
 
 ## Açık konular

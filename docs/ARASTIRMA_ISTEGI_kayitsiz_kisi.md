@@ -54,6 +54,21 @@ Gözlemler:
 - Kişi sayısı arttıkça `unknown` oranını patlatan şart eşik değil, marj.
 - Küçük grupta yabancı kolayca kabul ediliyor. Eşiği gevşetmek gruptaki kişiler için iyi, yabancılar için kötü.
 
+## Ek veri: AMI gerçek toplantı (4 toplantı, 16 kişi, Mix-Headset)
+
+Kayıt ve test aynı toplantıdan (aynı oturum). Her toplantıda 3 kişi kayıtlı, 4. kişi kayıtsız (her kişi sırayla).
+Doğal turlar (1-8 sn, medyan ~2,6 sn):
+
+| Ayar | doğru | unknown | yanlış isim | kayıtsız kabul |
+|---|---|---|---|---|
+| τ=0,50, m=0,10 | 80,2 | 18,8 | 1,0 | 2,2 |
+| τ=0,30, m=0,05 (LibriSpeech ızgarası) | 92,7 | 4,9 | 2,4 | 31,7 |
+| τ=0,45, m=0,05 (AMI ızgarası) | 88,8 | 9,4 | 1,9 | 10,1 |
+
+Gözlem: Aynı oturumda gruptaki kişilerin skorları yüksek, bu yüzden yüksek bir τ yabancıyı iyi ayırıyor. Ama
+eşik veri setleri arasında taşınmıyor. Ek soru: Eşiği her görüşmenin kendi kayıt verisinden (oturum başında)
+otomatik kalibre etmenin bir yolu var mı?
+
 ## Sorular
 
 1. **Skor normalizasyonu:** AS-norm, S-norm, Z/T-norm gibi yöntemler, 3-5 kişilik kapalı bir grupta kayıtsız kişiyi

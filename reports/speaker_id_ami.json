@@ -1,0 +1,496 @@
+{
+ "speakers": [
+  {
+   "meeting": "ES2004a",
+   "speaker": "MEO015",
+   "talk_s": 105.1,
+   "clean_s": 73.5,
+   "enroll_s": 25.0,
+   "natural_median_s": 2.61,
+   "n_test_1.0": 8,
+   "n_test_2.0": 5,
+   "n_test_4.0": 3,
+   "n_test_natural": 8
+  },
+  {
+   "meeting": "ES2004a",
+   "speaker": "FEE013",
+   "talk_s": 389.8,
+   "clean_s": 306.6,
+   "enroll_s": 25.0,
+   "natural_median_s": 3.1,
+   "n_test_1.0": 52,
+   "n_test_2.0": 33,
+   "n_test_4.0": 21,
+   "n_test_natural": 52
+  },
+  {
+   "meeting": "ES2004a",
+   "speaker": "FEE016",
+   "talk_s": 265.5,
+   "clean_s": 187.1,
+   "enroll_s": 25.0,
+   "natural_median_s": 2.82,
+   "n_test_1.0": 39,
+   "n_test_2.0": 26,
+   "n_test_4.0": 14,
+   "n_test_natural": 39
+  },
+  {
+   "meeting": "ES2004a",
+   "speaker": "MEE014",
+   "talk_s": 162.8,
+   "clean_s": 95.9,
+   "enroll_s": 25.0,
+   "natural_median_s": 1.82,
+   "n_test_1.0": 17,
+   "n_test_2.0": 7,
+   "n_test_4.0": 5,
+   "n_test_natural": 17
+  },
+  {
+   "meeting": "IS1009a",
+   "speaker": "FIE088",
+   "talk_s": 412.5,
+   "clean_s": 342.5,
+   "enroll_s": 25.0,
+   "natural_median_s": 3.45,
+   "n_test_1.0": 59,
+   "n_test_2.0": 43,
+   "n_test_4.0": 26,
+   "n_test_natural": 59
+  },
+  {
+   "meeting": "IS1009a",
+   "speaker": "FIO089",
+   "talk_s": 144.2,
+   "clean_s": 106.9,
+   "enroll_s": 25.0,
+   "natural_median_s": 3.79,
+   "n_test_1.0": 15,
+   "n_test_2.0": 14,
+   "n_test_4.0": 7,
+   "n_test_natural": 15
+  },
+  {
+   "meeting": "IS1009a",
+   "speaker": "FIO084",
+   "talk_s": 68.2,
+   "clean_s": 28.8,
+   "enroll_s": 14.4,
+   "natural_median_s": 2.36,
+   "n_test_1.0": 4,
+   "n_test_2.0": 3,
+   "n_test_4.0": 1,
+   "n_test_natural": 4
+  },
+  {
+   "meeting": "IS1009a",
+   "speaker": "FIO087",
+   "talk_s": 70.9,
+   "clean_s": 44.5,
+   "enroll_s": 22.3,
+   "natural_median_s": 3.0,
+   "n_test_1.0": 4,
+   "n_test_2.0": 4,
+   "n_test_4.0": 1,
+   "n_test_natural": 4
+  },
+  {
+   "meeting": "TS3003a",
+   "speaker": "MTD009PM",
+   "talk_s": 850.3,
+   "clean_s": 811.1,
+   "enroll_s": 25.0,
+   "natural_median_s": 4.14,
+   "n_test_1.0": 80,
+   "n_test_2.0": 77,
+   "n_test_4.0": 48,
+   "n_test_natural": 80
+  },
+  {
+   "meeting": "TS3003a",
+   "speaker": "MTD011UID",
+   "talk_s": 39.6,
+   "clean_s": 19.9,
+   "enroll_s": 9.9,
+   "natural_median_s": 1.63,
+   "n_test_1.0": 4,
+   "n_test_2.0": 1,
+   "n_test_4.0": 0,
+   "n_test_natural": 4
+  },
+  {
+   "meeting": "TS3003a",
+   "speaker": "MTD012ME",
+   "talk_s": 109.4,
+   "clean_s": 79.8,
+   "enroll_s": 25.0,
+   "natural_median_s": 2.58,
+   "n_test_1.0": 14,
+   "n_test_2.0": 8,
+   "n_test_4.0": 5,
+   "n_test_natural": 14
+  },
+  {
+   "meeting": "TS3003a",
+   "speaker": "MTD0010ID",
+   "talk_s": 26.5,
+   "clean_s": 22.5,
+   "enroll_s": 11.2,
+   "natural_median_s": 1.44,
+   "n_test_1.0": 3,
+   "n_test_2.0": 1,
+   "n_test_4.0": 1,
+   "n_test_natural": 3
+  },
+  {
+   "meeting": "EN2002a",
+   "speaker": "MEE071",
+   "talk_s": 511.0,
+   "clean_s": 223.7,
+   "enroll_s": 25.0,
+   "natural_median_s": 1.86,
+   "n_test_1.0": 75,
+   "n_test_2.0": 33,
+   "n_test_4.0": 10,
+   "n_test_natural": 75
+  },
+  {
+   "meeting": "EN2002a",
+   "speaker": "MEE073",
+   "talk_s": 612.6,
+   "clean_s": 282.4,
+   "enroll_s": 25.0,
+   "natural_median_s": 2.32,
+   "n_test_1.0": 74,
+   "n_test_2.0": 42,
+   "n_test_4.0": 22,
+   "n_test_natural": 74
+  },
+  {
+   "meeting": "EN2002a",
+   "speaker": "FEO072",
+   "talk_s": 879.5,
+   "clean_s": 568.2,
+   "enroll_s": 25.0,
+   "natural_median_s": 3.37,
+   "n_test_1.0": 80,
+   "n_test_2.0": 80,
+   "n_test_4.0": 42,
+   "n_test_natural": 80
+  },
+  {
+   "meeting": "EN2002a",
+   "speaker": "FEO070",
+   "talk_s": 526.8,
+   "clean_s": 301.1,
+   "enroll_s": 25.0,
+   "natural_median_s": 2.55,
+   "n_test_1.0": 65,
+   "n_test_2.0": 44,
+   "n_test_4.0": 23,
+   "n_test_natural": 65
+  }
+ ],
+ "rows": [
+  {
+   "enrolled": 4,
+   "test": "1",
+   "top1": 87.7,
+   "n": 593,
+   "başlangıç": {
+    "correct": 53.5,
+    "unknown": 44.9,
+    "wrong": 1.7,
+    "impostor_accepted": null
+   },
+   "LibriSpeech ızgarası": {
+    "correct": 80.3,
+    "unknown": 12.8,
+    "wrong": 6.9,
+    "impostor_accepted": null
+   }
+  },
+  {
+   "enrolled": 4,
+   "test": "2",
+   "top1": 94.5,
+   "n": 421,
+   "başlangıç": {
+    "correct": 72.0,
+    "unknown": 27.3,
+    "wrong": 0.7,
+    "impostor_accepted": null
+   },
+   "LibriSpeech ızgarası": {
+    "correct": 90.5,
+    "unknown": 7.8,
+    "wrong": 1.7,
+    "impostor_accepted": null
+   }
+  },
+  {
+   "enrolled": 4,
+   "test": "4",
+   "top1": 99.6,
+   "n": 229,
+   "başlangıç": {
+    "correct": 83.8,
+    "unknown": 16.2,
+    "wrong": 0.0,
+    "impostor_accepted": null
+   },
+   "LibriSpeech ızgarası": {
+    "correct": 96.9,
+    "unknown": 3.1,
+    "wrong": 0.0,
+    "impostor_accepted": null
+   }
+  },
+  {
+   "enrolled": 4,
+   "test": "natural",
+   "top1": 94.9,
+   "n": 593,
+   "başlangıç": {
+    "correct": 78.9,
+    "unknown": 20.1,
+    "wrong": 1.0,
+    "impostor_accepted": null
+   },
+   "LibriSpeech ızgarası": {
+    "correct": 91.2,
+    "unknown": 6.1,
+    "wrong": 2.7,
+    "impostor_accepted": null
+   }
+  },
+  {
+   "enrolled": 3,
+   "test": "1",
+   "top1": 90.5,
+   "n": 1779,
+   "başlangıç": {
+    "correct": 55.5,
+    "unknown": 43.0,
+    "wrong": 1.5,
+    "impostor_accepted": 5.2
+   },
+   "LibriSpeech ızgarası": {
+    "correct": 83.2,
+    "unknown": 11.6,
+    "wrong": 5.2,
+    "impostor_accepted": 34.4
+   }
+  },
+  {
+   "enrolled": 3,
+   "test": "2",
+   "top1": 95.9,
+   "n": 1263,
+   "başlangıç": {
+    "correct": 73.3,
+    "unknown": 26.0,
+    "wrong": 0.6,
+    "impostor_accepted": 3.8
+   },
+   "LibriSpeech ızgarası": {
+    "correct": 92.2,
+    "unknown": 6.5,
+    "wrong": 1.3,
+    "impostor_accepted": 30.4
+   }
+  },
+  {
+   "enrolled": 3,
+   "test": "4",
+   "top1": 99.7,
+   "n": 687,
+   "başlangıç": {
+    "correct": 85.0,
+    "unknown": 15.0,
+    "wrong": 0.0,
+    "impostor_accepted": 1.3
+   },
+   "LibriSpeech ızgarası": {
+    "correct": 97.8,
+    "unknown": 2.2,
+    "wrong": 0.0,
+    "impostor_accepted": 34.5
+   }
+  },
+  {
+   "enrolled": 3,
+   "test": "natural",
+   "top1": 96.1,
+   "n": 1779,
+   "başlangıç": {
+    "correct": 80.2,
+    "unknown": 18.8,
+    "wrong": 1.0,
+    "impostor_accepted": 2.2
+   },
+   "LibriSpeech ızgarası": {
+    "correct": 92.7,
+    "unknown": 4.9,
+    "wrong": 2.4,
+    "impostor_accepted": 31.7
+   }
+  }
+ ],
+ "grid_3enrolled": {
+  "2.0": {
+   "tau": 0.2,
+   "margin": 0.05,
+   "correct": 92.2,
+   "unknown": 6.5,
+   "wrong": 1.3,
+   "impostor_accepted": 43.9
+  },
+  "natural": {
+   "tau": 0.45,
+   "margin": 0.05,
+   "correct": 88.8,
+   "unknown": 9.4,
+   "wrong": 1.9,
+   "impostor_accepted": 10.1
+  }
+ },
+ "share": [
+  {
+   "meeting": "ES2004a",
+   "speakers": [
+    "FEE013",
+    "FEE016",
+    "MEE014",
+    "MEO015"
+   ],
+   "true_pct": [
+    42.2,
+    28.8,
+    17.6,
+    11.4
+   ],
+   "top1_pct": [
+    39.5,
+    37.1,
+    12.0,
+    11.4
+   ],
+   "thr_pct": [
+    42.8,
+    34.7,
+    12.1,
+    10.4
+   ],
+   "mae_top1_pp": 4.2,
+   "mae_thr_pp": 3.2,
+   "windows": 526,
+   "unknown_windows_pct": 10.6
+  },
+  {
+   "meeting": "IS1009a",
+   "speakers": [
+    "FIE088",
+    "FIO084",
+    "FIO087",
+    "FIO089"
+   ],
+   "true_pct": [
+    59.3,
+    9.8,
+    10.2,
+    20.7
+   ],
+   "top1_pct": [
+    55.2,
+    3.4,
+    6.9,
+    34.5
+   ],
+   "thr_pct": [
+    56.9,
+    3.8,
+    7.2,
+    32.2
+   ],
+   "mae_top1_pp": 6.9,
+   "mae_thr_pp": 5.7,
+   "windows": 406,
+   "unknown_windows_pct": 21.2
+  },
+  {
+   "meeting": "TS3003a",
+   "speakers": [
+    "MTD0010ID",
+    "MTD009PM",
+    "MTD011UID",
+    "MTD012ME"
+   ],
+   "true_pct": [
+    2.6,
+    82.9,
+    3.9,
+    10.7
+   ],
+   "top1_pct": [
+    11.3,
+    77.0,
+    3.7,
+    8.0
+   ],
+   "thr_pct": [
+    7.4,
+    82.0,
+    1.9,
+    8.7
+   ],
+   "mae_top1_pp": 4.3,
+   "mae_thr_pp": 2.4,
+   "windows": 648,
+   "unknown_windows_pct": 18.7
+  },
+  {
+   "meeting": "EN2002a",
+   "speakers": [
+    "FEO070",
+    "FEO072",
+    "MEE071",
+    "MEE073"
+   ],
+   "true_pct": [
+    20.8,
+    34.8,
+    20.2,
+    24.2
+   ],
+   "top1_pct": [
+    35.3,
+    30.7,
+    18.7,
+    15.3
+   ],
+   "thr_pct": [
+    33.2,
+    31.8,
+    18.5,
+    16.5
+   ],
+   "mae_top1_pp": 7.2,
+   "mae_thr_pp": 6.2,
+   "windows": 1275,
+   "unknown_windows_pct": 10.2
+  }
+ ],
+ "settings": {
+  "başlangıç": [
+   0.5,
+   0.1
+  ],
+  "LibriSpeech ızgarası": [
+   0.3,
+   0.05
+  ]
+ }
+}

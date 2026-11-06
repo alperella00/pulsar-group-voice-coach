@@ -122,3 +122,47 @@ ax.set_axisbelow(True)
 fig.tight_layout()
 fig.savefig(OUT / "gemini_ttfb.png", dpi=160)
 print("ok:", sorted(p.name for p in OUT.glob("*.png")))
+
+# 5) LibriSpeech vs AMI (3 kişi kayıtlı, eşiksiz top-1)
+ami = json.loads(Path("reports/speaker_id_ami.json").read_text())
+cats = ["1", "2", "4", "natural"]
+cat_names = ["1 sn", "2 sn", "4 sn", "doğal tur\n(medyan ~2,6 sn)"]
+libri = [next(r["top1_acc"] for r in rows if r["N"] == 3 and r["L_s"] == float(c)) if c != "natural" else None
+         for c in cats]
+amiv = [next(r["top1"] for r in ami["rows"] if r["enrolled"] == 3 and r["test"] == c) for c in cats]
+fig, ax = plt.subplots(figsize=(8, 3.9))
+w = 0.36
+for i, (lv, av) in enumerate(zip(libri, amiv)):
+    if lv is not None:
+        ax.bar(i - w / 2, lv, w, color=BLUE, edgecolor=SURFACE, linewidth=2, label="LibriSpeech (sesli kitap)" if i == 0 else None)
+        ax.text(i - w / 2, lv + 0.6, f"%{lv:.0f}", ha="center", color=INK, fontsize=9)
+    ax.bar(i + w / 2, av, w, color=ORANGE, edgecolor=SURFACE, linewidth=2, label="AMI (gerçek toplantı)" if i == 0 else None)
+    ax.text(i + w / 2, av + 0.6, f"%{av:.0f}", ha="center", color=INK, fontsize=9)
+ax.set_xticks(range(len(cats)), cat_names)
+ax.set_ylim(80, 107)
+ax.set_yticks([80, 85, 90, 95, 100])
+ax.set_ylabel("Doğru tanıma (%, eşiksiz)")
+ax.set_title("3 kişilik grup: temiz kayıt ve gerçek toplantı", loc="left", fontsize=13)
+ax.legend(frameon=False, loc="upper left", ncol=2)
+style(ax)
+fig.tight_layout()
+fig.savefig(OUT / "speaker_id_libri_vs_ami.png", dpi=160)
+
+# 6) Konuşma payı: gerçek vs tahmin (AMI, 4 toplantı)
+fig, axes = plt.subplots(1, 4, figsize=(10, 3.4), sharey=True)
+for ax, sh in zip(axes, ami["share"]):
+    n = len(sh["speakers"])
+    xs4 = range(n)
+    ax.bar([x - 0.2 for x in xs4], sh["true_pct"], 0.38, color=BLUE, edgecolor=SURFACE, linewidth=2,
+           label="Gerçek (RTTM)")
+    ax.bar([x + 0.2 for x in xs4], sh["thr_pct"], 0.38, color=ORANGE, edgecolor=SURFACE, linewidth=2,
+           label="Pulsar tahmini")
+    ax.set_xticks(list(xs4), [f"K{i + 1}" for i in xs4])
+    ax.set_title(f"{sh['meeting']}\nort. hata {sh['mae_thr_pp']} puan", fontsize=10, loc="left")
+    style(ax)
+axes[0].set_ylabel("Konuşma payı (%)")
+axes[0].legend(frameon=False, fontsize=8, loc="upper left")
+fig.suptitle("Kim ne kadar konuştu? Gerçek pay ve 1,5 sn'lik pencerelerden tahmin", x=0.01, ha="left", fontsize=13)
+fig.tight_layout()
+fig.savefig(OUT / "talk_share_ami.png", dpi=160)
+print("ok: AMI grafikleri")

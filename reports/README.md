@@ -7,6 +7,7 @@ Pulsar'ın her parçasının ölçüm sonuçları. Ham sayılar her deneyin `.md
 |---|---|---|---|
 | 1 | Gemini Live risk testi | 2026-11-06 | [`gemini_turn_test.md`](gemini_turn_test.md), `.jsonl` |
 | 2 | Ses parmak izi: LibriSpeech (40 kişi) | 2026-11-06 | [`speaker_id_librispeech.md`](speaker_id_librispeech.md), `.json` |
+| 3 | Ses parmak izi + konuşma payı: AMI gerçek toplantı | 2026-11-06 | [`speaker_id_ami.md`](speaker_id_ami.md), `.json` |
 
 ---
 
@@ -99,5 +100,44 @@ emin olmadığında "Kim sordu?" diyebiliyor mu?
    (bkz. `docs/ARASTIRMA_ISTEGI_kayitsiz_kisi.md`). Araştırma raporu skor normalizasyonunu "demo için gereksiz"
    demişti; ölçüm bu konuda fazla iyimser olduğunu gösterdi.
 
-**Sınır:** LibriSpeech temiz, tek mikrofonlu sesli kitap kaydı. Bu sonuçlar bir **üst sınır**. Gerçek toplantı
-sesiyle (AMI) yapılacak test sıradaki adım.
+**Sınır:** LibriSpeech temiz, tek mikrofonlu sesli kitap kaydı. Gerçek toplantı testi aşağıda (3).
+
+---
+
+## 3. Gerçek toplantıda: AMI
+
+**Soru:** İnsanların birbirinin sözünü kestiği, kısa cevaplar verdiği gerçek bir toplantıda da tanıyabiliyor muyuz?
+Kimin ne kadar konuştuğunu doğru gösterebiliyor muyuz?
+
+**Kurgu:**
+- **Veri:** 4 gerçek toplantı (toplam 16 kişi, ~92 dk). Karışık ses akışı (Mix-Headset).
+- **Kayıt:** Her kişinin toplantıdaki ilk ~25 sn temiz konuşması.
+- **Test:** Toplantının geri kalanındaki temiz turlar. Gerçek turların medyan uzunluğu ~2,6 sn.
+- **Kayıtsız kişi testi:** Her toplantıda 3 kişi kayıtlı, 4. kişi kayıtsız; her kişi sırayla dışarıda bırakılıyor.
+
+![LibriSpeech ve AMI](figures/speaker_id_libri_vs_ami.png)
+
+| 3 kişi kayıtlı (eşiksiz) | 1 sn | 2 sn | 4 sn | doğal tur |
+|---|---|---|---|---|
+| LibriSpeech | %89,0 | %95,2 | %97,6 | — |
+| **AMI** | **%90,5** | **%95,9** | **%99,7** | **%96,1** |
+
+| AMI, doğal turlar, 3 kayıtlı + 1 kayıtsız | Doğru | "Kim sordu?" | Yanlış isim | Kayıtsız kabul |
+|---|---|---|---|---|
+| Başlangıç ayarı (τ=0,5, m=0,1) | %80,2 | %18,8 | %1,0 | %2,2 |
+| LibriSpeech'te bulunan ayar (τ=0,3, m=0,05) | %92,7 | %4,9 | **%2,4** | %31,7 |
+| **AMI'de bulunan ayar (τ=0,45, m=0,05)** | **%88,8** | **%9,4** | **%1,9** | **%10,1** |
+
+![Konuşma payı](figures/talk_share_ami.png)
+
+**Ne öğrendik?**
+1. **Gerçek toplantı, temiz sesli kitaptan kötü çıkmadı.** 3 kişi, doğal turlarda %96. Muhtemel nedeni: kayıt ve
+   test aynı oturumdan geliyor (aynı mikrofon, aynı oda). Demo senaryosu da tam olarak böyle: görüşmenin başında
+   kayıt, aynı görüşmede tanıma.
+2. **Eşik veri setinden veri setine taşınmıyor.** LibriSpeech'te seçtiğimiz ayar AMI'de yanlış isim oranını %2,4'e
+   çıkarıyor ve yabancıların %32'sini içeri alıyor. AMI'nin kendi ayarı daha dengeli. Eşik, hedef ortama benzeyen
+   veriyle seçilmeli.
+3. **Konuşma payı ortalama 2-6 puan sapıyor.** En çok sapan, en çok örtüşme olan toplantı. "Kim az konuşuyor?"
+   sorusunu cevaplamaya yetiyor, kesin bir ölçüm değil.
+4. **Sınırlar:** 16 konuşmacı ve dengesiz test sayıları; kayıt toplantının içinden kesik parçalarla yapıldı;
+   konuşma payında gerçek VAD yerine RTTM kullanıldı.
