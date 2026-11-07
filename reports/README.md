@@ -9,6 +9,11 @@ Pulsar'ın her parçasının ölçüm sonuçları. Ham sayılar her deneyin `.md
 | 2 | Ses parmak izi: LibriSpeech (40 kişi) | 2026-11-06 | [`speaker_id_librispeech.md`](speaker_id_librispeech.md), `.json` |
 | 3 | Ses parmak izi + konuşma payı: AMI gerçek toplantı | 2026-11-06 | [`speaker_id_ami.md`](speaker_id_ami.md), `.json` |
 | 4 | Uçtan uca replay: Silero VAD turları + ses parmak izi | 2026-11-07 | [`replay_vad_speaker.md`](replay_vad_speaker.md) |
+| 5 | ASR: Parakeet (MLX) bellek, hız, gerçek zamanda gecikme | 2026-11-07 | [`asr_parakeet.md`](asr_parakeet.md) |
+| 6 | Hitap: ASR "Pulsar"ı nasıl yazıyor, kurallar | 2026-11-07 | [`addressing_asr.md`](addressing_asr.md) |
+| 7 | Uçtan uca: kullanıcının sesi → Gemini'nin sesli cevabı | 2026-11-07 | [`e2e_scenario.md`](e2e_scenario.md) |
+| 8 | Prosodi + ton notu (M6: Gemini gerçekten yavaşlıyor mu?) | 2026-11-07 | [`prosody_tone.md`](prosody_tone.md), `tone_test.jsonl` |
+| 9 | Konuşma sayacı, proaktif soru, söz kesme | 2026-11-07 | [`turn_manager.md`](turn_manager.md) |
 
 ---
 
@@ -163,3 +168,13 @@ Turun doğru sahibi RTTM'den: tur içinde en çok konuşan kişi.
 2. **Sorun VAD'ın konuşmacı değişimini bilmemesi.** Turların ~%28'i birden fazla kişi içeriyor; insanlar çoğu zaman
    sessizlik bırakmadan söz alıyor. Tur sonu sessizliğini 250 ms'ye indirmek çözmedi.
 3. Kısa turlar (< 1 sn, çoğu "yeah") tanınmıyor; Pulsar bunlara zaten cevap vermeyecek.
+
+---
+
+## 5-9. Kısa özet (ayrıntılar ilgili dosyalarda)
+- **ASR:** ~150-200 ms/tur, 2,0 GB; gerçek zamanda ~1 sn (boşta yavaşlama, çözülmedi).
+- **Hitap:** ASR 5'te 3 "Pussar" yazıyor; Levenshtein ≤ 1 + çoğul hariç + başkasına hitap kuralı (K21).
+- **Uçtan uca:** Pulsar 4/4 isimle cevap; kişinin susmasından ilk sese 2,0-2,8 sn.
+- **Ton:** "~%25 yavaş" talimatı Gemini'yi sadece ~%7 yavaşlattı; time-stretch ya da hız parametreli model gerekiyor.
+- **Sayaç/proaktif:** sayaç gerçeğe 1-4 puan yakın; en sessiz kişiye konuyla ilgili soru (~0,6 sn).
+  Gemini ~2 dk sessizlikte bağlantıyı kapatıyor → yeniden bağlanma. Söz kesme sadece Pulsar konuşurken.

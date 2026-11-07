@@ -3,7 +3,7 @@
 > Bu dosya her çalışma oturumunun sonunda güncellenir. Yeni bir sohbet önce bunu okur, sonra gerekiyorsa
 > `MIMARI.md` (sistem), `KARARLAR.md` (K1–K22) ve `reports/README.md`'ye (bulgular) bakar.
 
-**Son güncelleme:** 2026-11-07 (uçtan uca çalışıyor: ses → kim/ne → hitap → Gemini → sesli cevap)
+**Son güncelleme:** 2026-11-07 (K22 kapsamı bitti; README yazıldı; dal replay-pipeline, push yok)
 
 ## Kısaca proje
 **2026-11-07:** Salı görüşmesinde sunulmayacak; portfolyo + öğrenme projesi, demo videosu yok, teslim tarihi yok.
@@ -44,7 +44,7 @@ prosodiyle bulan ve sadece kendisine hitap edilen turları, bir COACH NOTE ile b
 - **Test sesi her zaman gerçek insan sesi** (LibriSpeech/AMI). TTS yok, smoke testte bile (K13).
 
 ## Sırada
-1. **İngilizce README** (mimari şeması, nasıl çalıştırılır, ölçümler, bilinen sorunlar/geliştirilecekler) + `reports/README.md` özet güncellemesi + ders notu sayfası güncellemesi. Kapsam K22'deki kod işleri bitti.
+1. **Proje kapsamı (K22) tamamlandı.** README İngilizce yazıldı (sonuç tablosu, bilinen sorunlar, çalıştırma). Açık kalanlar README'deki "Known issues" listesi. İsteğe bağlı: ders notu sayfasını (https://claude.ai/artifact/5Dtuz7DkxWGViTJyDJotau) VAD/ASR/hitap/Gemini/prosodi gerçek çıktılarıyla güncellemek; `replay-pipeline` dalını main'e birleştirip push etmek.
 
 ## Geliştirilecekler (bilinen, ölçülmüş sorunlar; demo sonrası)
 - **ASR gerçek zamanda ~1 sn** (beklemesiz ~150 ms): boşta yavaşlama, sebep doğrulanmadı (macOS güç yönetimi şüphesi). Aday çözüm: StreamingParakeet ile tur sırasında döküm; ayrı süreç. Kullanıcı kararı (2026-11-07): şimdilik kabul, en son dönülecek. `reports/asr_parakeet.md`
