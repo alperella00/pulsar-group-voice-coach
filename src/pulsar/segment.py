@@ -59,7 +59,7 @@ def gaps(probs: np.ndarray, neg_th: float) -> list[float]:
 
 def window_changes(spk: SpeakerID, audio: np.ndarray) -> list[float]:
     size, hop = int(WIN_S * SR), int(HOP_S * SR)
-    if len(audio) < size + 2 * hop:
+    if len(spk.names) < 2 or len(audio) < size + 2 * hop:  # tek kişi kayıtlıysa değişim olamaz
         return []
     E = np.stack([spk.embed(audio[i:i + size]) for i in range(0, len(audio) - size + 1, hop)])
     S = E @ spk.C.T

@@ -3,9 +3,10 @@
 > Bu dosya her çalışma oturumunun sonunda güncellenir. Yeni bir sohbet önce bunu okur, sonra gerekiyorsa
 > `MIMARI.md` (sistem), `KARARLAR.md` (K1–K21) ve `reports/README.md`'ye (bulgular) bakar.
 
-**Son güncelleme:** 2026-11-07 (ASR bağlandı; gerçek zamanda ASR ~1 sn, karar bekleniyor)
+**Son güncelleme:** 2026-11-07 (uçtan uca çalışıyor: ses → kim/ne → hitap → Gemini → sesli cevap)
 
 ## Kısaca proje
+**2026-11-07:** Salı görüşmesinde sunulmayacak; portfolyo + öğrenme projesi, demo videosu yok, teslim tarihi yok.
 Pulsar: 3-4 kişilik online İngilizce konuşma grubunda kimin konuştuğunu ses parmak iziyle, nasıl konuştuğunu
 prosodiyle bulan ve sadece kendisine hitap edilen turları, bir COACH NOTE ile birlikte Gemini 3.8 Live'a
 (speech-to-speech) gönderen bir koç. Dinleme modu: C-lite (K3).
@@ -27,6 +28,7 @@ prosodiyle bulan ve sadece kendisine hitap edilen turları, bir COACH NOTE ile b
 | 11-07 | **Tur içi bölme (K20)** | `src/pulsar/segment.py`, varsayılan açık (`--no-split` ile kapalı). Süreye göre doğru %57,5 → %65,7, yanlış %30,3 → %23,5; ≥ 4 sn turlarda yanlış %11 → %3. Yeni sorun: bölünmüş 1-2 sn parçalarda yanlış %19. Eval artık süre bazlı ölçüm de veriyor; log dizinleri `logs/base`, `logs/split` |
 | 11-07 | **ASR bağlandı** (commit sonrası, henüz commit'lenmedi) | `src/pulsar/asr.py`, `--no-asr` ile kapalı. Bellek 2,0 GB, beklemesiz ~150-200 ms/tur. **Gerçek zamanda ~1 sn** (boşta yavaşlama; ısıtma/QoS etkisiz). `reports/asr_parakeet.md`. Commit `4ee8316` dal `replay-pipeline` (push yok) |
 | 11-07 | **Kullanıcı kayıtları + "Pulsar" ASR testi** | 15 cümle, WhatsApp (Opus) → `data/user/*.wav`, `data/user/index.json`. ASR 3/5 "Pussar" yazıyor. Levenshtein ≤ 2 "pulse"u yakalıyor, ≤ 1 yakalamıyor; boost 2 isimleri düzeltip `?`'leri düşürüyor, boost ≥ 5 halüsinasyon. K21 onaylandı: greedy + lev ≤ 1 + çoğul hariç + başka katılımcıya hitap kuralı. `src/pulsar/addressing.py`, test `scripts/eval_addressing.py`: 12/12 + senaryo 10/10 (kurallar bu kayıtlarla ayarlandı, ayrı test seti gerekir). `reports/addressing_asr.md` |
+| 11-07 | **UÇTAN UCA ÇALIŞIYOR: Gemini Live bağlandı** | `s2s.py` (Gemini 3.8 Live, A yolu), `coach.py` (COACH NOTE + son konuşmalar), `player.py` (24 kHz, `--play`), tur yöneticisi `app.py`'de (IDLE/WAITING/PULSAR_SPEAKING, 10 sn sessizlik zaman aşımı, meşgulken atla). Senaryo (`scripts/make_scenario.py`, kullanıcı kayıtları): 4/4 cevapta isimle hitap, toplam gecikme kısa turlarda 2,0-2,8 sn. `reports/e2e_scenario.md`, cevaplar `logs/replies/` |
 
 ## Ortam notları
 - Disk: Parakeet sonrası ~11 GB boş (model 4,7 GB, `~/.cache/huggingface`). `.venv` 1,2 GB (torch + mlx).
@@ -40,7 +42,7 @@ prosodiyle bulan ve sadece kendisine hitap edilen turları, bir COACH NOTE ile b
 - **Test sesi her zaman gerçek insan sesi** (LibriSpeech/AMI). TTS yok, smoke testte bile (K13).
 
 ## Sırada
-1. **Gemini'yi canlı bağlamak:** `addressing` → EVET olan turu (ses + COACH NOTE) Gemini 3.8 Live'a gönder, cevabı hoparlöre çal, `on_reply` ile takip penceresini aç; tur yöneticisi (MIMARI §5.8). Hitap henüz `app.py`'ye bağlı değil. Sonra: prosodi → sayaç/proaktif → README/video.
+1. **Tanıtım aşaması** (canlıda kayıt + Pulsar'ın karşılaması; şu an tanıtım normal tur gibi Gemini'ye gidiyor, 30 sn → 9 sn TTFB) ve **canlı mikrofon girişi** (sounddevice, MacBook mikrofonu; Bluetooth 8 kHz). Sonra: prosodi → ton notu → konuşma sayacı/proaktif → README (İngilizce). (Demo videosu yok.)
 
 ## Geliştirilecekler (bilinen, ölçülmüş sorunlar; demo sonrası)
 - **ASR gerçek zamanda ~1 sn** (beklemesiz ~150 ms): boşta yavaşlama, sebep doğrulanmadı (macOS güç yönetimi şüphesi). Aday çözüm: StreamingParakeet ile tur sırasında döküm; ayrı süreç. Kullanıcı kararı (2026-11-07): şimdilik kabul, en son dönülecek. `reports/asr_parakeet.md`
