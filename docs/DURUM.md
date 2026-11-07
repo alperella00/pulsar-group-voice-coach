@@ -44,7 +44,7 @@ prosodiyle bulan ve sadece kendisine hitap edilen turları, bir COACH NOTE ile b
 - **Test sesi her zaman gerçek insan sesi** (LibriSpeech/AMI). TTS yok, smoke testte bile (K13).
 
 ## Sırada
-1. **Proje kapsamı (K22) tamamlandı.** README İngilizce yazıldı (sonuç tablosu, bilinen sorunlar, çalıştırma). Açık kalanlar README'deki "Known issues" listesi. İsteğe bağlı: ders notu sayfasını (https://claude.ai/artifact/5Dtuz7DkxWGViTJyDJotau) VAD/ASR/hitap/Gemini/prosodi gerçek çıktılarıyla güncellemek. (main push edildi: b2499b6; kişisel sağlık notu push öncesi geçmişten temizlendi.)
+1. **Proje kapsamı (K22) tamamlandı.** README İngilizce yazıldı (sonuç tablosu, bilinen sorunlar, çalıştırma). Açık kalanlar README'deki "Known issues" listesi. Ders notu sayfası (https://claude.ai/artifact/5Dtuz7DkxWGViTJyDJotau) gerçek çıktılarla güncellendi (sürüm 2; kaynak `notes/ders_notu.src.html` + `notes/ders_notu_data.json`). (main push edildi: b2499b6; kişisel sağlık notu push öncesi geçmişten temizlendi.)
 
 ## Geliştirilecekler (bilinen, ölçülmüş sorunlar; demo sonrası)
 - **ASR gerçek zamanda ~1 sn** (beklemesiz ~150 ms): boşta yavaşlama, sebep doğrulanmadı (macOS güç yönetimi şüphesi). Aday çözüm: StreamingParakeet ile tur sırasında döküm; ayrı süreç. Kullanıcı kararı (2026-11-07): şimdilik kabul, en son dönülecek. `reports/asr_parakeet.md`
