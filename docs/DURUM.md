@@ -3,7 +3,7 @@
 > Bu dosya her çalışma oturumunun sonunda güncellenir. Yeni bir sohbet önce bunu okur, sonra gerekiyorsa
 > `MIMARI.md` (sistem), `KARARLAR.md` (K1–K22) ve `reports/README.md`'ye (bulgular) bakar.
 
-**Son güncelleme:** 2026-11-07 (K22 kapsamı bitti; README yazıldı; dal replay-pipeline, push yok)
+**Son güncelleme:** 2026-11-07 (K22 kapsamı bitti; README yazıldı; main'e birleştirildi ve push edildi, b2499b6)
 
 ## Kısaca proje
 **2026-11-07:** Salı görüşmesinde sunulmayacak; portfolyo + öğrenme projesi, demo videosu yok, teslim tarihi yok.
@@ -26,7 +26,7 @@ prosodiyle bulan ve sadece kendisine hitap edilen turları, bir COACH NOTE ile b
 | 11-07 | **Replay iskeleti çalışıyor** | `src/pulsar/` (audio_in, vad, speaker, rttm, events, app). `uv run python -m pulsar --meeting ES2004a [--speed 0]`. Gerçek zamanda 60 sn → 60,1 sn. Kayıt RTTM'den ilk 25 sn (kullanıcı seçti). Değerlendirme `scripts/eval_replay.py` |
 | 11-07 | **Uçtan uca ölçüm: VAD turları + parmak izi** | 4 toplantı, 809 tur: doğru %64,9, unknown %26,7, **yanlış isim %8,4** (RTTM'li ölçümde %1,9). Ana neden karışık turlar (%28, yanlış %21). 250 ms sessizlik çözmedi. `reports/replay_vad_speaker.md`, README §4 |
 | 11-07 | **Tur içi bölme (K20)** | `src/pulsar/segment.py`, varsayılan açık (`--no-split` ile kapalı). Süreye göre doğru %57,5 → %65,7, yanlış %30,3 → %23,5; ≥ 4 sn turlarda yanlış %11 → %3. Yeni sorun: bölünmüş 1-2 sn parçalarda yanlış %19. Eval artık süre bazlı ölçüm de veriyor; log dizinleri `logs/base`, `logs/split` |
-| 11-07 | **ASR bağlandı** (commit sonrası, henüz commit'lenmedi) | `src/pulsar/asr.py`, `--no-asr` ile kapalı. Bellek 2,0 GB, beklemesiz ~150-200 ms/tur. **Gerçek zamanda ~1 sn** (boşta yavaşlama; ısıtma/QoS etkisiz). `reports/asr_parakeet.md`. Commit `4ee8316` dal `replay-pipeline` (push yok) |
+| 11-07 | **ASR bağlandı** (commit sonrası, henüz commit'lenmedi) | `src/pulsar/asr.py`, `--no-asr` ile kapalı. Bellek 2,0 GB, beklemesiz ~150-200 ms/tur. **Gerçek zamanda ~1 sn** (boşta yavaşlama; ısıtma/QoS etkisiz). `reports/asr_parakeet.md`. main'de |
 | 11-07 | **Kullanıcı kayıtları + "Pulsar" ASR testi** | 15 cümle, WhatsApp (Opus) → `data/user/*.wav`, `data/user/index.json`. ASR 3/5 "Pussar" yazıyor. Levenshtein ≤ 2 "pulse"u yakalıyor, ≤ 1 yakalamıyor; boost 2 isimleri düzeltip `?`'leri düşürüyor, boost ≥ 5 halüsinasyon. K21 onaylandı: greedy + lev ≤ 1 + çoğul hariç + başka katılımcıya hitap kuralı. `src/pulsar/addressing.py`, test `scripts/eval_addressing.py`: 12/12 + senaryo 10/10 (kurallar bu kayıtlarla ayarlandı, ayrı test seti gerekir). `reports/addressing_asr.md` |
 | 11-07 | **UÇTAN UCA ÇALIŞIYOR: Gemini Live bağlandı** | `s2s.py` (Gemini 3.8 Live, A yolu), `coach.py` (COACH NOTE + son konuşmalar), `player.py` (24 kHz, `--play`), tur yöneticisi `app.py`'de (IDLE/WAITING/PULSAR_SPEAKING, 10 sn sessizlik zaman aşımı, meşgulken atla). Senaryo (`scripts/make_scenario.py`, kullanıcı kayıtları): 4/4 cevapta isimle hitap, toplam gecikme kısa turlarda 2,0-2,8 sn. `reports/e2e_scenario.md`, cevaplar `logs/replies/` |
 | 11-07 | **Prosodi + ton notu (K22 kapsamı)** | `prosody.py` (hız, duraksama, MLR, dolgu, F0; kişinin tanıtım normaline göre z; normal / slightly_slow / struggling), `coach.py` ton satırı, `app.py`'ye bağlı. pros_slow → struggling. **M6: Gemini "~%25 yavaş" talimatıyla sadece ~%7 yavaşladı** (n=5+5), duraksama koymadı → time-stretch / hız parametreli S2S geliştirilecek. `reports/prosody_tone.md` |
@@ -44,7 +44,7 @@ prosodiyle bulan ve sadece kendisine hitap edilen turları, bir COACH NOTE ile b
 - **Test sesi her zaman gerçek insan sesi** (LibriSpeech/AMI). TTS yok, smoke testte bile (K13).
 
 ## Sırada
-1. **Proje kapsamı (K22) tamamlandı.** README İngilizce yazıldı (sonuç tablosu, bilinen sorunlar, çalıştırma). Açık kalanlar README'deki "Known issues" listesi. İsteğe bağlı: ders notu sayfasını (https://claude.ai/artifact/5Dtuz7DkxWGViTJyDJotau) VAD/ASR/hitap/Gemini/prosodi gerçek çıktılarıyla güncellemek; `replay-pipeline` dalını main'e birleştirip push etmek.
+1. **Proje kapsamı (K22) tamamlandı.** README İngilizce yazıldı (sonuç tablosu, bilinen sorunlar, çalıştırma). Açık kalanlar README'deki "Known issues" listesi. İsteğe bağlı: ders notu sayfasını (https://claude.ai/artifact/5Dtuz7DkxWGViTJyDJotau) VAD/ASR/hitap/Gemini/prosodi gerçek çıktılarıyla güncellemek. (main push edildi: b2499b6; kişisel sağlık notu push öncesi geçmişten temizlendi.)
 
 ## Geliştirilecekler (bilinen, ölçülmüş sorunlar; demo sonrası)
 - **ASR gerçek zamanda ~1 sn** (beklemesiz ~150 ms): boşta yavaşlama, sebep doğrulanmadı (macOS güç yönetimi şüphesi). Aday çözüm: StreamingParakeet ile tur sırasında döküm; ayrı süreç. Kullanıcı kararı (2026-11-07): şimdilik kabul, en son dönülecek. `reports/asr_parakeet.md`
