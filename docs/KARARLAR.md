@@ -141,6 +141,24 @@ Her kararda değerlendirilen seçenekler, seçilen seçenek ve gerekçesi yazıl
   LibriSpeech ayarı AMI'de yanlış isim %2,4 ve kayıtsız kabul %32 verdi, yani eşik veri setleri arasında taşınmıyor.
 - **Geçici:** Kayıtsız kişi araştırması (`docs/ARASTIRMA_ISTEGI_kayitsiz_kisi.md`) gelince gözden geçirilecek.
 
+### K19. VAD: `silero-vad` paketi (PyTorch) (2026-11-07)
+- **Seçenekler:** `silero-vad` paketi (PyTorch) / sherpa-onnx içindeki Silero VAD / Silero ONNX + kendi döngümüz.
+- **Seçilen:** `silero-vad` paketi (6.2.3, torch 2.15).
+- **Neden:** Her 32 ms blok için ham konuşma olasılığını doğrudan veriyor. Tur kesme mantığını (500 ms sessizlik vb.)
+  kendimiz yazacağız, bu da öğrenmek için en şeffaf yol. Bedeli: `.venv` 795 MB oldu (torch).
+- **İlk ölçüm (RTTM'ye karşı, 32 ms bloklar, eşik 0,5):** ES2004a recall %78 / precision %99, EN2002a %84 / %99.
+  Eşik 0,2'de recall +4-5 puan. Blok başına 0,18 ms. Kaçırılanlar büyük ihtimalle kısa onaylar ("yeah") ve
+  RTTM sınır payları. Başlangıç eşiği 0,5.
+
+### K20. Tur içi konuşmacı değişimi: kayan pencere + aday kesim noktası; < 1 sn'ye isim yok (2026-11-07)
+- **Sorun:** VAD konuşmacı değişimini bilmiyor; AMI'de turların ~%28'i karışık, yanlış isimlerin %68'i buradan.
+- **Seçenekler:** sessizlik eşiğini kısaltmak (250 ms denendi, çözmedi) / kayan pencerelerle bölmek / hedef konuşmacı
+  çıkarma, TS-VAD (üst üste konuşma için; ağır, sonraya).
+- **Seçilen:** `segment.py`: 1,5 sn pencere / 0,5 sn kayma, değişim ≥ 2 pencere; kısa boşluklar (≥ 150 ms) aday kesim
+  noktası (kullanıcının önerisiyle), sol/sağ ayrı tanınır. Alt turlar kendi sesiyle yeniden tanınır. < 1 sn'ye isim yok.
+- **Ölçüm:** konuşma süresine göre doğru %57,5 → %65,7, yanlış %30,3 → %23,5; ama bölünmüş 1-2 sn parçalarda yanlış
+  isim %19 (`reports/replay_vad_speaker.md`). `--no-split` ile eski davranış.
+
 ### K15. İsim ve repo (2026-11-06)
 - Asistanın adı **Pulsar**.
 - Repo `pulsar-group-voice-coach`, public. "chat" yerine "coach" seçildi, çünkü amaç dil pratiği.

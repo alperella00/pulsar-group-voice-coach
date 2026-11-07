@@ -8,6 +8,7 @@ Pulsar'ın her parçasının ölçüm sonuçları. Ham sayılar her deneyin `.md
 | 1 | Gemini Live risk testi | 2026-11-06 | [`gemini_turn_test.md`](gemini_turn_test.md), `.jsonl` |
 | 2 | Ses parmak izi: LibriSpeech (40 kişi) | 2026-11-06 | [`speaker_id_librispeech.md`](speaker_id_librispeech.md), `.json` |
 | 3 | Ses parmak izi + konuşma payı: AMI gerçek toplantı | 2026-11-06 | [`speaker_id_ami.md`](speaker_id_ami.md), `.json` |
+| 4 | Uçtan uca replay: Silero VAD turları + ses parmak izi | 2026-11-07 | [`replay_vad_speaker.md`](replay_vad_speaker.md) |
 
 ---
 
@@ -141,3 +142,24 @@ Kimin ne kadar konuştuğunu doğru gösterebiliyor muyuz?
    sorusunu cevaplamaya yetiyor, kesin bir ölçüm değil.
 4. **Sınırlar:** 16 konuşmacı ve dengesiz test sayıları; kayıt toplantının içinden kesik parçalarla yapıldı;
    konuşma payında gerçek VAD yerine RTTM kullanıldı.
+
+---
+
+## 4. Uçtan uca replay: turları gerçek VAD kesince
+
+**Soru:** Turları RTTM'den değil Silero VAD'dan alınca (canlı sistemde olacağı gibi) tanıma ne kadar tutuyor?
+
+**Kurgu:** 4 AMI toplantısı, 4 kişi kayıtlı (RTTM'den ilk 25 sn), VAD eşiği 0,5, tur sonu sessizliği 500 ms, τ=0,45 / m=0,05.
+Turun doğru sahibi RTTM'den: tur içinde en çok konuşan kişi.
+
+| | n | Doğru | Unknown | Yanlış isim |
+|---|---|---|---|---|
+| Tek kişilik turlar | 580 | %65,7 | %30,9 | %3,4 |
+| Karışık turlar (birden fazla kişi) | 229 | %62,9 | %16,2 | **%21,0** |
+| Hepsi | 809 | %64,9 | %26,7 | **%8,4** |
+
+**Ne öğrendik?**
+1. **RTTM'li ölçüm iyimserdi.** Gerçek VAD turlarında yanlış isim %1,9'dan %8,4'e çıktı.
+2. **Sorun VAD'ın konuşmacı değişimini bilmemesi.** Turların ~%28'i birden fazla kişi içeriyor; insanlar çoğu zaman
+   sessizlik bırakmadan söz alıyor. Tur sonu sessizliğini 250 ms'ye indirmek çözmedi.
+3. Kısa turlar (< 1 sn, çoğu "yeah") tanınmıyor; Pulsar bunlara zaten cevap vermeyecek.

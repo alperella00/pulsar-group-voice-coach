@@ -405,6 +405,15 @@
 
 ---
 
+## G. Benzer projeler (2026-11-07, kullanıcının taraması; kaynaklar henüz doğrulanmadı)
+| Proje | Benzerlik | Fark / bize ne lazım |
+|---|---|---|
+| NVIDIA NeMo Voice Agent + Streaming Sortformer | Her turda konuşmacı kimliği LLM'e gidiyor ("Speaker: Ayşe" fikri) | STT→LLM→TTS zinciri. **Sortformer** kare düzeyinde, örtüşmeyi de gören streaming diarization: bizim karışık tur sorununa (replay ölçümü, yanlış isimlerin %68'i) doğrudan aday. M2/8 GB'da çalışır mı bakılmalı |
+| Telnyx Skip Turn | Çok kişili aramada hitap edilmedikçe susuyor | Kararı LLM bir "sırayı geç" aracıyla veriyor; bizde lokal kurallar (K3). Görüşmede karşılaştırma için |
+| Adaptis (StartHack25) | Kayıt + ECAPA (192 boyut) + FAISS, kişi başı hafıza | Demo ölçeğinde aynı tasarım. FAISS bizde gereksiz (K16). Kayıt/eşik nasıl yapılmış, kod incelenebilir |
+| Dexway | Dil kursunda AI kolaylaştırıcılı grup konuşma | Ürün olarak en yakın; konuşmacı tespiti doğrulanamadı |
+| ConversAR (arXiv) | Tek öğrenci + AI ajan grubu | Literatürde grup konuşma pratiği boşluğu: README gerekçesi için alıntı |
+
 ## Uyarılar
 - Model adları, fiyatlar ve özellikler (Gemini 3.8 Live, gpt-realtime-2.1, GPT-Live 1) Eylül–Ekim 2026 kaynaklarından. Çoğu fiyat rakamı resmî sayfaları aktaran üçüncü taraf sitelerden geliyor. Kodlamadan önce `ai.google.dev` ve `platform.openai.com` fiyat sayfalarını kontrol edin.
 - Gemini 3.8'de affective dialog'un durumu konusunda Google'ın iki belgesi çelişiyor.
