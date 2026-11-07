@@ -5,9 +5,11 @@ requires-python = ">=3.12"
 dependencies = [
     "google-genai>=3.0.0",
     "numpy>=2.5.4",
+    "parakeet-mlx>=0.7.0",
     "python-dotenv>=1.2.4",
     "sherpa-onnx>=2.0.1",
     "silero-vad>=6.2.3",
+    "sounddevice>=0.5.6",
     "soundfile>=0.14.0",
 ]
 

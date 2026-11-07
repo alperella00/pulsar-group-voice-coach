@@ -1,9 +1,9 @@
 # Durum: nerede kaldık, sırada ne var
 
 > Bu dosya her çalışma oturumunun sonunda güncellenir. Yeni bir sohbet önce bunu okur, sonra gerekiyorsa
-> `MIMARI.md` (sistem), `KARARLAR.md` (K1–K20) ve `reports/README.md`'ye (bulgular) bakar.
+> `MIMARI.md` (sistem), `KARARLAR.md` (K1–K21) ve `reports/README.md`'ye (bulgular) bakar.
 
-**Son güncelleme:** 2026-11-07 (tur içi bölme K20: süreye göre doğru %66; 1-2 sn parçalar sorunlu)
+**Son güncelleme:** 2026-11-07 (ASR bağlandı; gerçek zamanda ASR ~1 sn, karar bekleniyor)
 
 ## Kısaca proje
 Pulsar: 3-4 kişilik online İngilizce konuşma grubunda kimin konuştuğunu ses parmak iziyle, nasıl konuştuğunu
@@ -25,8 +25,12 @@ prosodiyle bulan ve sadece kendisine hitap edilen turları, bir COACH NOTE ile b
 | 11-07 | **Replay iskeleti çalışıyor** | `src/pulsar/` (audio_in, vad, speaker, rttm, events, app). `uv run python -m pulsar --meeting ES2004a [--speed 0]`. Gerçek zamanda 60 sn → 60,1 sn. Kayıt RTTM'den ilk 25 sn (kullanıcı seçti). Değerlendirme `scripts/eval_replay.py` |
 | 11-07 | **Uçtan uca ölçüm: VAD turları + parmak izi** | 4 toplantı, 809 tur: doğru %64,9, unknown %26,7, **yanlış isim %8,4** (RTTM'li ölçümde %1,9). Ana neden karışık turlar (%28, yanlış %21). 250 ms sessizlik çözmedi. `reports/replay_vad_speaker.md`, README §4 |
 | 11-07 | **Tur içi bölme (K20)** | `src/pulsar/segment.py`, varsayılan açık (`--no-split` ile kapalı). Süreye göre doğru %57,5 → %65,7, yanlış %30,3 → %23,5; ≥ 4 sn turlarda yanlış %11 → %3. Yeni sorun: bölünmüş 1-2 sn parçalarda yanlış %19. Eval artık süre bazlı ölçüm de veriyor; log dizinleri `logs/base`, `logs/split` |
+| 11-07 | **ASR bağlandı** (commit sonrası, henüz commit'lenmedi) | `src/pulsar/asr.py`, `--no-asr` ile kapalı. Bellek 2,0 GB, beklemesiz ~150-200 ms/tur. **Gerçek zamanda ~1 sn** (boşta yavaşlama; ısıtma/QoS etkisiz). `reports/asr_parakeet.md`. Commit `4ee8316` dal `replay-pipeline` (push yok) |
+| 11-07 | **Kullanıcı kayıtları + "Pulsar" ASR testi** | 15 cümle, WhatsApp (Opus) → `data/user/*.wav`, `data/user/index.json`. ASR 3/5 "Pussar" yazıyor. Levenshtein ≤ 2 "pulse"u yakalıyor, ≤ 1 yakalamıyor; boost 2 isimleri düzeltip `?`'leri düşürüyor, boost ≥ 5 halüsinasyon. K21 onaylandı: greedy + lev ≤ 1 + çoğul hariç + başka katılımcıya hitap kuralı. `src/pulsar/addressing.py`, test `scripts/eval_addressing.py`: 12/12 + senaryo 10/10 (kurallar bu kayıtlarla ayarlandı, ayrı test seti gerekir). `reports/addressing_asr.md` |
 
 ## Ortam notları
+- Disk: Parakeet sonrası ~11 GB boş (model 4,7 GB, `~/.cache/huggingface`). `.venv` 1,2 GB (torch + mlx).
+- zsh'de değişkendeki birden fazla argümanı geçirirken `${=opt}` kullan (yoksa tek argüman olarak gidiyor).
 - `.env` içinde `GEMINI_API_KEY` (ücretsiz katman). Key'i yazdırma.
 - Gemini: 3.8 Live → `api_version="v1beta"`; 2.5 native audio → yalnızca `v1alpha` (yedek, yavaş).
 - Embedding modeli: `models/wespeaker_en_voxceleb_resnet34_LM.onnx` (gitignored). Yeniden indirmek için:
@@ -36,7 +40,12 @@ prosodiyle bulan ve sadece kendisine hitap edilen turları, bir COACH NOTE ile b
 - **Test sesi her zaman gerçek insan sesi** (LibriSpeech/AMI). TTS yok, smoke testte bile (K13).
 
 ## Sırada
-1. **Karar bekleniyor:** bölünmüş 1-2 sn parçalar için sıkı kural + τ/m'yi gerçek VAD turlarıyla yeniden seçmek mi, yoksa önce ASR → hitap → Gemini mi? Sonra: prosodi → sayaç/proaktif.
+1. **Gemini'yi canlı bağlamak:** `addressing` → EVET olan turu (ses + COACH NOTE) Gemini 3.8 Live'a gönder, cevabı hoparlöre çal, `on_reply` ile takip penceresini aç; tur yöneticisi (MIMARI §5.8). Hitap henüz `app.py`'ye bağlı değil. Sonra: prosodi → sayaç/proaktif → README/video.
+
+## Geliştirilecekler (bilinen, ölçülmüş sorunlar; demo sonrası)
+- **ASR gerçek zamanda ~1 sn** (beklemesiz ~150 ms): boşta yavaşlama, sebep doğrulanmadı (macOS güç yönetimi şüphesi). Aday çözüm: StreamingParakeet ile tur sırasında döküm; ayrı süreç. Kullanıcı kararı (2026-11-07): şimdilik kabul, en son dönülecek. `reports/asr_parakeet.md`
+- **Üst üste konuşma**: hedef konuşmacı çıkarma / TS-VAD (aşağıda açık konular).
+- **Bölünmüş 1-2 sn parçalar** yanlış isim %19; τ/m gerçek VAD turlarıyla yeniden seçilmeli.
 2. Gemini'de düşük düşünme ayarıyla TTFB'yi tekrar ölçmek.
 
 ## Açık konular

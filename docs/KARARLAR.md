@@ -90,6 +90,10 @@ Her kararda değerlendirilen seçenekler, seçilen seçenek ve gerekçesi yazıl
   - Kelime zaman damgası veriyor; konuşma hızı ve duraksama ölçümleri için gerekli.
   - Whisper'ın M2 ölçümlerini doğrulayamadık.
 - **Bilinen açık:** Parakeet'te hotword/prompt desteği yok. "Pulsar" kelimesi transkriptte bulanık eşleşmeyle aranacak.
+- **Güncelleme (2026-11-07, ölçümle):** `parakeet-mlx` bf16 yüklüyor: MLX tepe bellek **~2,0 GB** (8 GB'a sığıyor; fp32
+  riski kapandı). Diskte model 4,7 GB. AMI turlarında tur başına medyan ~150-200 ms (beklemesiz). Paketin yeni sürümünde
+  **kelime güçlendirme** var (`boost.words`, beam search ile) → "Pulsar" için denenecek; bulanık eşleşme yedek kalıyor.
+  MLX stream'leri thread'e bağlı: ASR'nin kendi tek thread'i var (`src/pulsar/asr.py`).
 
 ### K12. Arayüz: terminal, hazır çerçeve yok (2026-11-06)
 - **Seçenekler:** Tarayıcı (WebRTC) / terminal; Pipecat / LiveKit Agents / kendi kodumuz.
@@ -158,6 +162,16 @@ Her kararda değerlendirilen seçenekler, seçilen seçenek ve gerekçesi yazıl
   noktası (kullanıcının önerisiyle), sol/sağ ayrı tanınır. Alt turlar kendi sesiyle yeniden tanınır. < 1 sn'ye isim yok.
 - **Ölçüm:** konuşma süresine göre doğru %57,5 → %65,7, yanlış %30,3 → %23,5; ama bölünmüş 1-2 sn parçalarda yanlış
   isim %19 (`reports/replay_vad_speaker.md`). `--no-split` ile eski davranış.
+
+### K21. Hitap: greedy ASR + Levenshtein ≤ 1, çoğul hariç; başka katılımcıya hitap kuralı (2026-11-07, ölçümle)
+- **Ölçüm** (`reports/addressing_asr.md`, kullanıcının 15 kaydı): ASR "Pulsar"ı 5'te 3 "Pussar" yazıyor.
+  Levenshtein ≤ 2 (MIMARI'deki plan) "pulse"u yakalıyor; ≤ 1 isimli 5/5'i yakalıyor, "pulse"u değil.
+- **Seçenekler:** lev ≤ 2 / lev ≤ 1 / Parakeet kelime güçlendirme (beam + boost).
+- **Seçilen:** greedy + lev ≤ 1; "pulsars" gibi çoğul hali sayılmıyor. Ek kural 0: cümle başka bir katılımcının
+  ismiyle başlıyor/bitiyorsa (ve "Pulsar" yoksa) takip penceresi açık olsa bile HAYIR (MIMARI §8 risk 6).
+- **Neden boost değil:** ağırlık 2'de soru işaretleri düşüyor (soru kuralı bozulur), ≥ 5'te olmayan yerde "Pulsar"
+  duyuyor ("My pulsar was really fast").
+- **Test:** 12/12 tek tek + 10/10 senaryo; ama kurallar bu kayıtlara bakılarak ayarlandı, ayrı test seti gerekir.
 
 ### K15. İsim ve repo (2026-11-06)
 - Asistanın adı **Pulsar**.

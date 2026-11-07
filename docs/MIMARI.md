@@ -159,8 +159,10 @@ Tek bir Python süreci, `asyncio` + `sounddevice`:
   (bkz. 5.7). Bu sayede kişi cümle ortasında düşünmek için durduğunda tur yarıda kesilmiyor.
 
 ### 5.3 Hitap tespiti (kurallar, sıra önemli)
-1. Transkriptte "Pulsar" veya ses olarak benzer bir varyantı geçiyor (`pulser`, `pulse are`, `polsar`, …;
-   Levenshtein ≤ 2) → **hitap var**.
+0. Cümle başka bir katılımcının ismiyle başlıyor ya da bitiyor ("Mehmet, what do you think?") ve "Pulsar" geçmiyor
+   → **hitap yok** (takip penceresi açık olsa bile). (K21)
+1. Transkriptte "Pulsar" veya 1 harf farkla benzeri geçiyor (ölçümde ASR 5'te 3 "Pussar" yazdı; Levenshtein ≤ 2
+   "pulse"u da yakalıyordu, bu yüzden ≤ 1). Çoğul hali ("pulsars") sayılmıyor → **hitap var**. (K21)
 2. Pulsar'ın son cevabından sonraki **takip penceresi** içinde (soruyla bittiyse 8 sn, bitmediyse 4 sn), Pulsar'ın
    cevap verdiği kişi konuşuyor → **hitap var**.
 3. Tur bir soru (soru işareti, wh- kelimesi veya yardımcı fiille başlıyor) **ve** son 30 sn'de Pulsar'a hitap

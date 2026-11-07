@@ -5,7 +5,8 @@
                      herkes ──► EventLog (JSONL)
 
 turn_worker turu gerekirse alt turlara böler (segment.py, K20).
-Sırada: turn_worker'a ASR + hitap kuralları, ardından Gemini istemcisi eklenecek.
+ASR (asr.py) bölmeyle paralel çalışır; kelimeler zamanlarına göre alt turlara dağıtılır.
+Sırada: hitap kuralları, ardından Gemini istemcisi eklenecek.
 """
 import argparse
 import asyncio
@@ -13,11 +14,18 @@ import time
 
 from . import SR
 from .audio_in import load_wav, replay
+from .asr import ASR
 from .events import EventLog
 from .rttm import enrollment_spans, load_rttm
 from .segment import split_turn
 from .speaker import SpeakerID
 from .vad import TurnSegmenter
+
+
+async def timed(coro):
+    t0 = time.perf_counter()
+    r = await coro
+    return r, (time.perf_counter() - t0) * 1000
 
 
 def enroll_from_rttm(spk: SpeakerID, audio, rttm_path: str, log: EventLog) -> None:
@@ -35,6 +43,15 @@ async def run(args) -> None:
     full = load_wav(args.wav)
     spk = SpeakerID(tau=args.tau, margin=args.margin)
     enroll_from_rttm(spk, full, args.rttm, log)
+    asr = None
+    if args.asr:
+        t0 = time.perf_counter()
+        if not args.qos:
+            import pulsar.asr as _a
+            _a._high_qos = lambda: None
+        asr = ASR()
+        asr.warmup()  # ilk çağrıdaki ~2 sn'lik MLX derlemesini açılışta öde
+        print(f"ASR hazır: {time.perf_counter() - t0:.1f} sn")
 
     audio = full[int(args.start * SR):] if args.max_s is None else \
         full[int(args.start * SR):int((args.start + args.max_s) * SR)]
@@ -50,6 +67,8 @@ async def run(args) -> None:
             for kind, val in seg.push(t, block, time.monotonic()):
                 if kind == "start":
                     log.write("vad_start", t=val)
+                    if asr and args.nudge:
+                        asr.nudge()
                 else:
                     log.write("vad_end", t=val.end, turn=val.id, start=val.start, dur=round(val.dur, 3),
                               detect_lag_ms=round((time.monotonic() - val.end_wall) * 1000, 1))
@@ -62,12 +81,17 @@ async def run(args) -> None:
     async def turn_worker():
         while (turn := await turns.get()) is not None:
             t0 = time.perf_counter()
-            if args.split:
-                # kimliğe bakarak turu alt turlara böl (segment.py); ağır iş ayrı thread'de, VAD bu sırada çalışıyor
-                pieces, info = await asyncio.to_thread(split_turn, spk, turn.audio, turn.probs, seg.neg_th)
-            else:
-                pieces, info = [None], {}
+            # konuşmacı bölme ve ASR aynı anda, ayrı thread'lerde; VAD bu sırada çalışmaya devam ediyor
+            jobs = [asyncio.to_thread(split_turn, spk, turn.audio, turn.probs, seg.neg_th) if args.split
+                    else asyncio.sleep(0, ([None], {}))]
+            if asr:
+                jobs.append(timed(asr.transcribe_async(turn.audio)))
+            out = await asyncio.gather(*jobs)
+            pieces, info = out[0]
+            tr, asr_ms = out[1] if asr else (None, 0.0)
             ms = (time.perf_counter() - t0) * 1000
+            if tr is not None:
+                log.write("asr", t=turn.end, turn=turn.id, n_words=len(tr.words), asr_ms=round(asr_ms, 1))
             if len(pieces) > 1:
                 log.write("split", t=turn.end, turn=turn.id, **info, split_ms=round(ms, 1))
             for k, pc in enumerate(pieces):
@@ -86,6 +110,11 @@ async def run(args) -> None:
                     who, extra = r.name or f"unknown (~{r.best_name})", f"skor {r.best:.2f}  fark {r.margin:.2f}"
                 tag = f" ↳{k}" if len(pieces) > 1 else "   "
                 print(f"[{a:7.2f} – {b:7.2f}]{tag} {b - a:4.1f} sn  {who:<22} {extra}")
+                if tr is not None:  # kelimeyi, orta noktası bu alt turun içine düşüyorsa bu alt tura yaz
+                    lo, hi = a - turn.start, b - turn.start
+                    words = [w.text for w in tr.words if lo <= (w.start + w.end) / 2 < hi]
+                    if words:
+                        print(f"{'':28}“{' '.join(words)}”")
             log.write("turn_done", t=turn.end, turn=turn.id, pieces=len(pieces), work_ms=round(ms, 1))
 
     t_start = time.monotonic()
@@ -108,6 +137,9 @@ def main() -> None:
     ap.add_argument("--vad-th", dest="vad_th", type=float, default=0.5)
     ap.add_argument("--min-silence-ms", dest="min_silence_ms", type=int, default=500)
     ap.add_argument("--no-split", dest="split", action="store_false", help="turu bölme (eski davranış)")
+    ap.add_argument("--no-asr", dest="asr", action="store_false", help="ASR'yi kapat")
+    ap.add_argument("--no-nudge", dest="nudge", action="store_false", help="konuşma başlarken GPU'yu ısıtma")
+    ap.add_argument("--no-qos", dest="qos", action="store_false", help="(deney) ASR thread'ini yüksek önceliğe alma")
     ap.add_argument("--log")
     args = ap.parse_args()
     args.wav = args.wav or f"data/ami/audio/{args.meeting}.Mix-Headset.wav"
