@@ -2,7 +2,8 @@
 
 Model kimin konuştuğunu sesten tahmin etmiyor; sadece bu nottan öğreniyor. Gemini sadece Pulsar'a söylenen turları
 duyduğu için, grubun kendi arasında konuştuklarını (ASR metni, sadece bellekte) da kısaca nota ekliyoruz.
-Prosodi ve CEFR geldiğinde ton satırı buraya eklenecek (K6).
+Ton satırı prosodi durumundan kurallarla seçiliyor (K6; her turda LLM yok). Gemini'de hız parametresi yok,
+hız doğal dil talimatıyla etkileniyor; işe yarayıp yaramadığı scripts/eval_tone.py ile ölçülüyor (M6).
 """
 from collections import deque
 
@@ -22,7 +23,18 @@ class Coach:
         if text:
             self.recent.append((who or "someone", text))
 
-    def note(self, speaker: str | None) -> str:
+    @staticmethod
+    def tone(state: str | None, speaker: str | None) -> str:
+        who = speaker or "them"
+        if state == "struggling":
+            return (f" Tone: {who} is speaking much slower than usual and pausing a lot, maybe struggling. "
+                    f"Speak about 25% slower than normal, with natural pauses between sentences. Use very short, "
+                    f"simple sentences. Start with a short encouraging acknowledgement, then ask one easy question.")
+        if state == "slightly_slow":
+            return " Tone: use slightly shorter and simpler sentences than usual."
+        return ""
+
+    def note(self, speaker: str | None, state: str | None = None) -> str:
         if speaker is None:
             body = ("Speaker: unknown (could not tell who is speaking). Do not guess a name. "
                     "Politely ask who asked, e.g. 'Sorry, who asked that?', then answer briefly.")
@@ -32,4 +44,10 @@ class Coach:
         ctx = ""
         if self.recent:
             ctx = " Recent group talk: " + " | ".join(f"{w}: {t}" for w, t in self.recent)
-        return f"[COACH NOTE] {body}{ctx}"
+        return f"[COACH NOTE] {body}{self.tone(state, speaker)}{ctx}"
+
+    def proactive(self, name: str) -> str:
+        ctx = " | ".join(f"{w}: {t[:120]}" for w, t in self.recent) or "small talk"
+        return (f"[COACH NOTE] {name} has been quiet for a while. Recent group talk: {ctx}. "
+                f"Ask {name} one short, friendly, easy question related to what the group is talking about. "
+                f"Use {name}'s name. One sentence only.")

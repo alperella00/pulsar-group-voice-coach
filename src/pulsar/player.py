@@ -32,6 +32,12 @@ class Player:
             self.reply += data
             self.end_wall = max(self.end_wall, time.monotonic()) + len(data) / 2 / OUT_SR
 
+    def clear(self) -> None:
+        """Söz kesme: çalmakta olan sesi hemen kes."""
+        with self.lock:
+            self.buf.clear()
+            self.end_wall = time.monotonic()
+
     def finish_reply(self) -> float:
         """Cevap bitti: sesi kaydet, süresini (sn) döndür."""
         with self.lock:

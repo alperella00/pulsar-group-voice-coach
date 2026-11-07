@@ -173,6 +173,12 @@ Her kararda değerlendirilen seçenekler, seçilen seçenek ve gerekçesi yazıl
   duyuyor ("My pulsar was really fast").
 - **Test:** 12/12 tek tek + 10/10 senaryo; ama kurallar bu kayıtlara bakılarak ayarlandı, ayrı test seti gerekir.
 
+### K22. Kalan kapsam: prosodi + ton notu, konuşma sayacı + proaktif, söz kesme; canlı mikrofon yok (2026-11-07)
+- **Bağlam:** Proje Salı görüşmesinde sunulmayacak; portfolyo projesi, hızlı bitirilecek. Demo videosu yok.
+- **Seçilen (kullanıcı):** prosodi + ton notu, konuşma sayacı + proaktif soru, söz kesme (barge-in). Hepsi replay ile test.
+- **Dışarıda:** canlı mikrofon + tanıtım aşaması (kullanıcı tek başına, çok kişili canlı test yapılamıyor) → README'de
+  sonraki adım. Türkçe konuşma desteği denenmedi (Parakeet v3 Türkçeyi desteklemiyor olabilir).
+
 ### K15. İsim ve repo (2026-11-06)
 - Asistanın adı **Pulsar**.
 - Repo `pulsar-group-voice-coach`, public. "chat" yerine "coach" seçildi, çünkü amaç dil pratiği.
